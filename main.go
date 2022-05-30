@@ -4,12 +4,15 @@ import (
 	"os"
 	"time"
 
+	"github.com/gdamore/tcell/v2"
 	"github.com/rhydianjenkins/cof/pkg/timeDrawer"
 	"github.com/rivo/tview"
 	"github.com/urfave/cli/v2"
 )
 
-const refreshInterval = 500 * time.Millisecond
+const (
+	refreshInterval = 500 * time.Millisecond
+)
 
 var (
 	cliApp *cli.App
@@ -36,7 +39,7 @@ func init() {
 				Aliases: []string{"t"},
 				Usage:   "Show the current time",
 				Action: func(c *cli.Context) error {
-					showTime(app)
+					start(app, timeDrawer.Draw)
 					return nil
 				},
 			},
@@ -45,8 +48,10 @@ func init() {
 	}
 }
 
-func showTime(app *tview.Application) {
-	view = tview.NewBox().SetDrawFunc(timeDrawer.Draw)
+type drawFn func(screen tcell.Screen, x int, y int, width int, height int) (int, int, int, int)
+
+func start(app *tview.Application, drawFn drawFn) {
+	view = tview.NewBox().SetDrawFunc(drawFn)
 
 	go tickLoop()
 
