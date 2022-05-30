@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/rhydianjenkins/cof/pkg/rainDrawer"
 	"github.com/rhydianjenkins/cof/pkg/timeDrawer"
 	"github.com/rivo/tview"
 	"github.com/urfave/cli/v2"
 )
 
 const (
-	refreshInterval = 500 * time.Millisecond
+	refreshInterval = 50 * time.Millisecond
 )
 
 var (
@@ -34,6 +35,15 @@ func init() {
 			},
 		},
 		Commands: []*cli.Command{
+			{
+				Name:    "rain",
+				Aliases: []string{"r"},
+				Usage:   "Show some rain",
+				Action: func(c *cli.Context) error {
+					start(app, rainDrawer.Draw)
+					return nil
+				},
+			},
 			{
 				Name:    "time",
 				Aliases: []string{"t"},
