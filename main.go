@@ -1,19 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
 
+	"github.com/rhydianjenkins/cof/pkg/timeDrawer"
+	"github.com/rivo/tview"
 	"github.com/urfave/cli/v2"
 )
 
-var app *cli.App
+const refreshInterval = 500 * time.Millisecond
+
+var (
+	cliApp *cli.App
+	view   *tview.Box
+	app    *tview.Application
+)
 
 func init() {
-	app = &cli.App{
+	app = tview.NewApplication()
+
+	cliApp = &cli.App{
 		Name:     "cof",
-		Version:  "v0.0.0",
+		Version:  "v0.0.1",
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
 			{
@@ -23,11 +32,11 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:    "add",
-				Aliases: []string{"a"},
-				Usage:   "Add a task to today",
+				Name:    "time",
+				Aliases: []string{"t"},
+				Usage:   "Show the current time",
 				Action: func(c *cli.Context) error {
-					fmt.Println("TODO")
+					showTime(app)
 					return nil
 				},
 			},
@@ -36,6 +45,27 @@ func init() {
 	}
 }
 
+func showTime(app *tview.Application) {
+	view = tview.NewBox().SetDrawFunc(timeDrawer.Draw)
+
+	go tickLoop()
+
+	if err := app.SetRoot(view, true).Run(); err != nil {
+		panic(err)
+	}
+}
+
+func tickLoop() {
+	tick := time.NewTicker(refreshInterval)
+
+	for {
+		select {
+		case <-tick.C:
+			app.Draw()
+		}
+	}
+}
+
 func main() {
-	app.Run(os.Args)
+	cliApp.Run(os.Args)
 }
