@@ -58,7 +58,7 @@ func init() {
 	}
 }
 
-type drawFn func(screen tcell.Screen, x int, y int, width int, height int) (int, int, int, int)
+type drawFn func(screen tcell.Screen, x, y, width, height int) (int, int, int, int)
 
 func start(app *tview.Application, drawFn drawFn) {
 	view = tview.NewBox().SetDrawFunc(drawFn)
