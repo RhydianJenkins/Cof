@@ -25,9 +25,10 @@ func init() {
 	app = tview.NewApplication()
 
 	cliApp = &cli.App{
-		Name:     "cof",
-		Version:  "v0.0.1",
-		Compiled: time.Now(),
+		Name:        "cof",
+		Version:     "v0.0.1",
+		Description: "A collection of TUI programs",
+		Compiled:    time.Now(),
 		Authors: []*cli.Author{
 			{
 				Name:  "Rhydian",

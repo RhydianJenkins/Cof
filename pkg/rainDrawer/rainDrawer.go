@@ -38,7 +38,7 @@ func createDrops(width int) {
 		posX := randomFloat(0, float64(width))
 		speed := randomFloat(MIN_DROP_SPEED, MAX_DROP_SPEED)
 		char := rune(DROP_CHARS[len(drops)%len(DROP_CHARS)])
-		newDrop := drop{posX: posX, posY: 0, speed: speed, drift: drift, char: char}
+		newDrop := drop{posX: posX, posY: -1, speed: speed, drift: drift, char: char}
 		drops = append(drops, &newDrop)
 	}
 }
