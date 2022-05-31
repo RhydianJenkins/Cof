@@ -25,7 +25,7 @@ type drop struct {
 	posY  float64
 	speed float64
 	drift float64
-	char  string
+	char  rune
 }
 
 func randomFloat(min, max float64) float64 {
@@ -33,11 +33,11 @@ func randomFloat(min, max float64) float64 {
 }
 
 func createDrops(width int) {
+	drift := RAIN_DROP_DRIFT
 	for i := 0; i < RAIN_INTENSITY; i++ {
 		posX := randomFloat(0, float64(width))
 		speed := randomFloat(MIN_DROP_SPEED, MAX_DROP_SPEED)
-		drift := RAIN_DROP_DRIFT
-		char := string(DROP_CHARS[len(drops)%len(DROP_CHARS)])
+		char := rune(DROP_CHARS[len(drops)%len(DROP_CHARS)])
 		newDrop := drop{posX: posX, posY: 0, speed: speed, drift: drift, char: char}
 		drops = append(drops, &newDrop)
 	}
@@ -63,7 +63,7 @@ func disposeDrops(maxHeight int) {
 
 func drawDrops(screen tcell.Screen, drops []*drop) {
 	for _, drop := range drops {
-		tview.Print(screen, drop.char, int(drop.posX), int(drop.posY), 1, tview.AlignLeft, tcell.ColorLime)
+		tview.Print(screen, string(drop.char), int(drop.posX), int(drop.posY), 1, tview.AlignLeft, tcell.ColorLime)
 	}
 }
 
