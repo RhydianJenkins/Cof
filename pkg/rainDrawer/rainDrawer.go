@@ -11,8 +11,8 @@ import (
 const (
 	DROP_CHAR      = "'"
 	RAIN_INTENSITY = 2
-	MIN_DROP_SPEED = 1
-	MAX_DROP_SPEED = 3
+	MIN_DROP_SPEED = 0.1
+	MAX_DROP_SPEED = 3.0
 )
 
 var (
@@ -20,19 +20,19 @@ var (
 )
 
 type drop struct {
-	posX  int
-	posY  int
-	speed int
+	posX  float64
+	posY  float64
+	speed float64
 }
 
-func randomInt(min, max int) int {
-	return min + rand.Intn(max-min)
+func randomFloat(min, max float64) float64 {
+	return min + rand.Float64()*(max-min)
 }
 
 func createDrops(width int) {
 	for i := 0; i < RAIN_INTENSITY; i++ {
-		posX := randomInt(0, width)
-		speed := randomInt(MIN_DROP_SPEED, MAX_DROP_SPEED)
+		posX := randomFloat(0, float64(width))
+		speed := randomFloat(MIN_DROP_SPEED, MAX_DROP_SPEED)
 		newDrop := drop{posX: posX, posY: 0, speed: speed}
 		drops = append(drops, &newDrop)
 	}
@@ -45,16 +45,10 @@ func incrementDrops() {
 }
 
 func disposeDrops(maxHeight int) {
-	for i := 0; i < len(drops); i++ {
-		if drops[i].posY > maxHeight {
-			drops[i] = nil
-		}
-	}
-
 	newDrops := make([]*drop, 0, len(drops))
-	for _, drop := range drops {
-		if drop != nil {
-			newDrops = append(newDrops, drop)
+	for i := 0; i < len(drops); i++ {
+		if drops[i].posY <= float64(maxHeight) {
+			newDrops = append(newDrops, drops[i])
 		}
 	}
 
@@ -63,7 +57,7 @@ func disposeDrops(maxHeight int) {
 
 func drawDrops(screen tcell.Screen, drops []*drop) {
 	for _, drop := range drops {
-		tview.Print(screen, DROP_CHAR, drop.posX, drop.posY, 1, tview.AlignLeft, tcell.ColorLime)
+		tview.Print(screen, DROP_CHAR, int(drop.posX), int(drop.posY), 1, tview.AlignLeft, tcell.ColorLime)
 	}
 }
 
