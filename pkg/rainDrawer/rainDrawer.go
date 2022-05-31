@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	DROP_CHAR      = "'"
-	RAIN_INTENSITY = 2
-	MIN_DROP_SPEED = 0.1
-	MAX_DROP_SPEED = 3.0
+	DROP_CHAR       = "'"
+	RAIN_INTENSITY  = 2
+	MIN_DROP_SPEED  = 0.5
+	MAX_DROP_SPEED  = 3.0
+	RAIN_DROP_DRIFT = 0.25
 )
 
 var (
@@ -23,6 +24,7 @@ type drop struct {
 	posX  float64
 	posY  float64
 	speed float64
+	drift float64
 }
 
 func randomFloat(min, max float64) float64 {
@@ -33,7 +35,8 @@ func createDrops(width int) {
 	for i := 0; i < RAIN_INTENSITY; i++ {
 		posX := randomFloat(0, float64(width))
 		speed := randomFloat(MIN_DROP_SPEED, MAX_DROP_SPEED)
-		newDrop := drop{posX: posX, posY: 0, speed: speed}
+		drift := RAIN_DROP_DRIFT
+		newDrop := drop{posX: posX, posY: 0, speed: speed, drift: drift}
 		drops = append(drops, &newDrop)
 	}
 }
@@ -41,6 +44,7 @@ func createDrops(width int) {
 func incrementDrops() {
 	for _, drop := range drops {
 		drop.posY += drop.speed
+		drop.posX += drop.drift
 	}
 }
 
