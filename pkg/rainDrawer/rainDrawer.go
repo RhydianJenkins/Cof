@@ -10,7 +10,7 @@ import (
 
 const (
 	DROP_CHARS      = "'`|-"
-	RAIN_INTENSITY  = 2
+	RAIN_INTENSITY  = 5
 	MIN_DROP_SPEED  = 0.5
 	MAX_DROP_SPEED  = 3.0
 	RAIN_DROP_DRIFT = 0.25
@@ -63,18 +63,18 @@ func disposeDrops(maxHeight int) {
 
 func drawDrops(screen tcell.Screen, drops []*drop) {
 	for _, drop := range drops {
-		tview.Print(screen, string(drop.char), int(drop.posX), int(drop.posY), 1, tview.AlignLeft, tcell.ColorLime)
+		tview.Print(screen, string(drop.char), int(drop.posX), int(drop.posY), 1, tview.AlignLeft, tcell.ColorBlue)
 	}
 }
 
 func Draw(screen tcell.Screen, x, y, width, height int) (int, int, int, int) {
-	str := fmt.Sprintf("%d rain drops falling", len(drops))
-	tview.Print(screen, str, x, height/2, width, tview.AlignCenter, tcell.ColorLime)
-
 	incrementDrops()
 	createDrops(width)
 	drawDrops(screen, drops)
 	disposeDrops(height)
+
+	str := fmt.Sprintf("%d rain drops falling", len(drops))
+	tview.Print(screen, str, x, height/2, width, tview.AlignCenter, tcell.ColorLime)
 
 	return 0, 0, 0, 0
 }
