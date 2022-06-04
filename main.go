@@ -5,8 +5,7 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/rhydianjenkins/cof/pkg/rainDrawer"
-	"github.com/rhydianjenkins/cof/pkg/timeDrawer"
+	"github.com/rhydianjenkins/cof/pkg/drawers"
 	"github.com/rivo/tview"
 	"github.com/urfave/cli/v2"
 )
@@ -42,7 +41,8 @@ func init() {
 				Aliases: []string{"r"},
 				Usage:   "Show some rain",
 				Action: func(c *cli.Context) error {
-					start(app, rainDrawer.Draw)
+					drawerFn := drawers.CreateRainDrawer().Draw
+					start(app, drawerFn)
 					return nil
 				},
 			},
@@ -51,7 +51,18 @@ func init() {
 				Aliases: []string{"t"},
 				Usage:   "Show the current time",
 				Action: func(c *cli.Context) error {
-					start(app, timeDrawer.Draw)
+					drawerFn := drawers.CreateTimeDrawer().Draw
+					start(app, drawerFn)
+					return nil
+				},
+			},
+			{
+				Name:    "form",
+				Aliases: []string{"f"},
+				Usage:   "Show a form",
+				Action: func(c *cli.Context) error {
+					drawerFn := drawers.CreateFormDrawer().Draw
+					start(app, drawerFn)
 					return nil
 				},
 			},
