@@ -16,8 +16,13 @@ const (
 )
 
 var (
-	drops []*drop
+	drops        []*drop
+	numDropChars float64
 )
+
+func init() {
+	numDropChars = float64(len(DROP_CHARS))
+}
 
 type drop struct {
 	posX  float64
@@ -32,12 +37,11 @@ func randomFloat(min, max float64) float64 {
 }
 
 func createDrops(width int) {
-	drift := RAIN_DROP_DRIFT
 	for i := 0; i < RAIN_INTENSITY; i++ {
 		posX := randomFloat(0, float64(width))
-		speed := randomFloat(MIN_DROP_SPEED, float64(len(DROP_CHARS)))
-		char := rune(DROP_CHARS[int(speed)])
-		newDrop := drop{posX: posX, posY: -1, speed: speed, drift: drift, char: char}
+		speed := randomFloat(MIN_DROP_SPEED, numDropChars)
+		char := rune(DROP_CHARS[int(speed)+1])
+		newDrop := drop{posX: posX, posY: -1, speed: speed, drift: RAIN_DROP_DRIFT, char: char}
 		drops = append(drops, &newDrop)
 	}
 }
