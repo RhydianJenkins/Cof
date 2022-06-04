@@ -9,11 +9,10 @@ import (
 )
 
 const (
-	DROP_CHARS      = "'`|-"
+	DROP_CHARS      = "`'|"
 	RAIN_INTENSITY  = 5
 	MIN_DROP_SPEED  = 0.5
-	MAX_DROP_SPEED  = 3.0
-	RAIN_DROP_DRIFT = 0.25
+	RAIN_DROP_DRIFT = 0.2
 )
 
 var (
@@ -36,8 +35,8 @@ func createDrops(width int) {
 	drift := RAIN_DROP_DRIFT
 	for i := 0; i < RAIN_INTENSITY; i++ {
 		posX := randomFloat(0, float64(width))
-		speed := randomFloat(MIN_DROP_SPEED, MAX_DROP_SPEED)
-		char := rune(DROP_CHARS[len(drops)%len(DROP_CHARS)])
+		speed := randomFloat(MIN_DROP_SPEED, float64(len(DROP_CHARS)))
+		char := rune(DROP_CHARS[int(speed)])
 		newDrop := drop{posX: posX, posY: -1, speed: speed, drift: drift, char: char}
 		drops = append(drops, &newDrop)
 	}

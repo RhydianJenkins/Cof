@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	refreshInterval = 50 * time.Millisecond
+	FPS             = 30
+	refreshInterval = time.Millisecond * 1000 / FPS
 )
 
 var (
